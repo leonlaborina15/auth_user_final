@@ -58,7 +58,7 @@ const Signup = () => {
                 <h1 className="text-white mb-4">Welcome to Devth.io</h1>
                 <div className="login p-5" style={{ maxWidth: "600px", width: "100%" }}>
                     <form className="m-2" onSubmit={onSubmitForm}>
-                        
+
                         <div className="form-group mb-3">
                             <label htmlFor="name" className="text-white">Full Name</label>
                             <input

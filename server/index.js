@@ -9,7 +9,7 @@ app.use(express.json());
 
 
 //ROUTES
-app.get('/' , async (req,res)=>{
+app.get('/', async (req, res) => {
     res.send("Your server is running");
 })
 // signup
@@ -20,15 +20,15 @@ app.post('/signup', async (req, res) => {
 
         const existingUser = await pool.query("SELECT * FROM auth WHERE user_name = $1", [user_name]);
         const existingEmail = await pool.query("SELECT * FROM auth WHERE email = $1", [email]);
-        
+
         if (existingUser.rows.length > 0) {
             return res.status(400).json({ error: "Username already exists" });
         }
-        
+
         if (existingEmail.rows.length > 0) {
             return res.status(400).json({ error: "Email already exists" });
         }
-        
+
 
         if (!user_name || !email || !pass || !pass2) {
             return res.status(400).json({ msg: 'Please enter alllllll fields' });
@@ -59,7 +59,6 @@ app.post('/signup', async (req, res) => {
         console.log(err);
     }
 })
-// login
 
 // login
 app.post('/login', async (req, res) => {
