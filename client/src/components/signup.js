@@ -30,7 +30,7 @@ const Signup = () => {
 
         try {
             const body = { user_name, email, pass, pass2 };
-            const response = await fetch("https://auth-user-final-server.vercel.app/signup", {
+            const response = await fetch("http://localhost:4000/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),

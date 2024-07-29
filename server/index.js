@@ -7,15 +7,12 @@ const bcrypt = require("bcrypt");
 app.use(cors());
 app.use(express.json());
 
-
-//ROUTES
-app.get('/', async (req, res) => {
+app.get('/', (req, res) => {
     res.send("Your server is running");
-})
-// signup
+});
+
 app.post('/signup', async (req, res) => {
     try {
-
         const { user_name, email, pass, pass2 } = req.body;
 
         const existingUser = await pool.query("SELECT * FROM auth WHERE user_name = $1", [user_name]);
@@ -29,38 +26,37 @@ app.post('/signup', async (req, res) => {
             return res.status(400).json({ error: "Email already exists" });
         }
 
-
         if (!user_name || !email || !pass || !pass2) {
-            return res.status(400).json({ msg: 'Please enter alllllll fields' });
+            return res.status(400).json({ msg: 'Please enter all fields' });
         }
 
         if (pass !== pass2) {
             return res.status(400).json({ msg: 'Passwords do not match' });
         }
-        if (pass.length < 8) {
 
+        if (pass.length < 8) {
             if (pass[0] !== pass[0].toUpperCase()) {
-                return res.status(400).json({ error: "Your password is too short and pass 1st letter need to be upper case" })
+                return res.status(400).json({ error: "Password is too short and must start with an uppercase letter" });
             } else {
-                return res.status(400).json({ error: "Your password is too short" })
+                return res.status(400).json({ error: "Password is too short" });
             }
         } else {
             if (pass[0] !== pass[0].toUpperCase()) {
-                return res.status(400).json({ error: "Your password first letter need to be upper case " })
+                return res.status(400).json({ error: "Password must start with an uppercase letter" });
             }
         }
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(pass, salt);
 
         const addUser = await pool.query('INSERT INTO auth (user_name, email, pass) VALUES ($1, $2, $3) RETURNING *', [user_name, email, hashedPassword]);
-        res.json(addUser.rows[0])
-
+        res.json(addUser.rows[0]);
     } catch (err) {
         console.log(err);
+        res.status(500).json({ error: "Server error" });
     }
-})
+});
 
-// login
 app.post('/login', async (req, res) => {
     try {
         const { email, pass } = req.body;
@@ -74,17 +70,13 @@ app.post('/login', async (req, res) => {
         if (!validPassword) {
             return res.status(400).json({ error: "Invalid password" });
         }
-        res.json({ message: "Login successfullyyyyy" });
-
+        res.json({ message: "Login successful" });
     } catch (err) {
         console.log(err);
-        res.status(500).json({ error: "Server errorrrr" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 
-// 
-// 
-
 app.listen(4000, () => {
-    console.log("Your app is running on port 4000")
-})
+    console.log("Your app is running on port 4000");
+});
