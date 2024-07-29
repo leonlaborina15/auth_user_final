@@ -15,7 +15,7 @@ const Login = () => {
         setError("");
         try {
             const body = { email, pass };
-            const response = await fetch("http://localhost:4000/login",
+            const response = await fetch("https://auth-user-final-server.vercel.app/login",
                 {
 
 
