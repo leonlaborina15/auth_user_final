@@ -3,8 +3,10 @@ const app = express();
 const cors = require("cors");
 const pool = require("./db");
 const bcrypt = require("bcrypt");
+require('dotenv').config();
 
-app.use(cors());
+// Middleware
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -77,6 +79,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.listen(4000, () => {
-    console.log("Your app is running on port 4000");
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
+    console.log(`Your server is running on http://localhost:${PORT}`);
 });
